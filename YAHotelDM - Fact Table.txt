@@ -1,0 +1,31 @@
+SELECT
+	YAHotelDM.dbo.DimDate.Date_SK,
+	YAHotelDM.dbo.DimEmployees.Employee_SK,
+	YAHotelDM.dbo.DimCustomers.Customer_SK,
+	YAHotelDM.dbo.DimRooms.Room_SK,
+	YAHotel.dbo.Orders.OrderID AS OrderID,
+	YAHotel.dbo.Orders.Quantity AS Quantity,
+	YAHotel.dbo.Orders.RoomPrice AS RoomPrice,
+	YAHotel.dbo.Orders.StartDate AS StartDate,
+	YAHotel.dbo.Orders.EndDate AS EndDate,
+	YAHotel.dbo.Orders.StayTime AS StayTime,
+	YAHotel.dbo.Orders.NumberofPeople AS NumberofPeople,
+	YAHotel.dbo.Orders.ReservationDate AS ReservationDate
+FROM 
+	YAHotel.dbo.Orders
+INNER JOIN
+	YAHotelDM.dbo.DimDate
+ON
+	YAHotelDM.dbo.DimDate.Date_SK = YAHotel.dbo.Orders.ReservationDate -- Changed to SK because ReservationDate is set as an integer in the OLTP database.
+INNER JOIN
+	YAHotelDM.dbo.DimEmployees
+ON
+	YAHotelDM.dbo.DimEmployees.EmployeeID = YAHotel.dbo.Orders.EmployeeID
+INNER JOIN
+	YAHotelDM.dbo.DimCustomers
+ON
+	YAHotelDM.dbo.DimCustomers.CustomerID = YAHotel.dbo.Orders.CustomerID
+INNER JOIN
+	YAHotelDM.dbo.DimRooms
+ON
+	YAHotelDM.dbo.DimRooms.RoomID = YAHotel.dbo.Orders.RoomID
